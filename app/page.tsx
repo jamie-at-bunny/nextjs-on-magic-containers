@@ -1,5 +1,6 @@
 import Image from "next/image";
 import MagicSVG from "./magic.svg";
+import { RabbitButton } from "./rabbit-button";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
           Next.js on Magic Containers!
         </h1>
       </div>
+      <RabbitButton />
     </div>
   );
 }
