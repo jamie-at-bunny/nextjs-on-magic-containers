@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { getRandomRabbitBreed } from "./actions";
+import { getRandomRabbitBreed, getLocationGreeting } from "./actions";
 
 export function RabbitButton() {
   const [serverActionBreed, setServerActionBreed] = useState<string | null>(
     null,
   );
   const [apiBreed, setApiBreed] = useState<string | null>(null);
+  const [greeting, setGreeting] = useState<string | null>(null);
   const [serverActionLoading, setServerActionLoading] = useState(false);
   const [apiLoading, setApiLoading] = useState(false);
+  const [greetingLoading, setGreetingLoading] = useState(false);
 
   async function handleServerActionClick() {
     setServerActionLoading(true);
@@ -24,6 +26,13 @@ export function RabbitButton() {
     const data = await response.json();
     setApiBreed(data.breed);
     setApiLoading(false);
+  }
+
+  async function handleGreetingClick() {
+    setGreetingLoading(true);
+    const result = await getLocationGreeting();
+    setGreeting(result);
+    setGreetingLoading(false);
   }
 
   return (
@@ -53,6 +62,19 @@ export function RabbitButton() {
         </button>
         {apiBreed && (
           <p className="text-lg font-medium text-gray-700">{apiBreed}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col items-center gap-3">
+        <button
+          onClick={handleGreetingClick}
+          disabled={greetingLoading}
+          className="px-6 py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors"
+        >
+          {greetingLoading ? "Loading..." : "Get Location Greeting"}
+        </button>
+        {greeting && (
+          <p className="text-lg font-medium text-gray-700">{greeting}</p>
         )}
       </div>
     </div>

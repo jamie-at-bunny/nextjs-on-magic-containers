@@ -1,6 +1,7 @@
 import Image from "next/image";
 import MagicSVG from "./magic.svg";
 import { RabbitButton } from "./rabbit-button";
+import { BunnyHeaders } from "./bunny-headers";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
         </h1>
       </div>
       <RabbitButton />
+      <BunnyHeaders />
     </div>
   );
 }
