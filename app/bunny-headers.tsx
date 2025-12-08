@@ -1,14 +1,18 @@
 import { headers } from "next/headers";
 
 const BUNNY_HEADERS = [
+  "cdn-cache",
+  "cdn-cachedat",
+  "cdn-edgestorageid",
+  "cdn-proxyver",
+  "cdn-pullzone",
   "cdn-requestcountrycode",
+  "cdn-requestid",
   "cdn-requestpullcode",
   "cdn-requestpullsuccess",
-  "cdn-uid",
-  "cdn-originip",
-  "cdn-originalhost",
-  "cdn-pullzone",
-  "cdn-requestid",
+  "cdn-requesttime",
+  "cdn-status",
+  "server",
 ];
 
 export async function BunnyHeaders() {
@@ -24,7 +28,8 @@ export async function BunnyHeaders() {
       <div className="bg-gray-100 rounded-lg p-6 max-w-md w-full">
         <h2 className="text-lg font-semibold mb-3">Bunny Request Headers</h2>
         <p className="text-gray-500 text-sm">
-          No Bunny headers detected. This app may not be running behind Bunny CDN.
+          No Bunny headers detected. This app may not be running behind Bunny
+          CDN.
         </p>
       </div>
     );
