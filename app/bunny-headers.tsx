@@ -1,19 +1,6 @@
 import { headers } from "next/headers";
 
-const BUNNY_HEADERS = [
-  "cdn-cache",
-  "cdn-cachedat",
-  "cdn-edgestorageid",
-  "cdn-proxyver",
-  "cdn-pullzone",
-  "cdn-requestcountrycode",
-  "cdn-requestid",
-  "cdn-requestpullcode",
-  "cdn-requestpullsuccess",
-  "cdn-requesttime",
-  "cdn-status",
-  "server",
-];
+const BUNNY_HEADERS = ["cdn-requestcountrycode", "cdn-requestid"];
 
 export async function BunnyHeaders() {
   const headersList = await headers();

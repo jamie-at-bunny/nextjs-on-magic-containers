@@ -248,20 +248,7 @@ Create `app/bunny-headers.tsx`:
 ```tsx
 import { headers } from "next/headers";
 
-const BUNNY_HEADERS = [
-  "cdn-cache",
-  "cdn-cachedat",
-  "cdn-edgestorageid",
-  "cdn-proxyver",
-  "cdn-pullzone",
-  "cdn-requestcountrycode",
-  "cdn-requestid",
-  "cdn-requestpullcode",
-  "cdn-requestpullsuccess",
-  "cdn-requesttime",
-  "cdn-status",
-  "server",
-];
+const BUNNY_HEADERS = ["cdn-requestcountrycode", "cdn-requestid"];
 
 export async function BunnyHeaders() {
   const headersList = await headers();
@@ -459,33 +446,32 @@ npm run build
 Create a `Dockerfile` in the project root:
 
 ```dockerfile
-FROM node:18-alpine AS base
+FROM node:lts-alpine AS base
 
+# Install
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
+# Build
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+RUN corepack enable pnpm && pnpm run build
 
+# Production
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-USER nextjs
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+RUN if [ -d "/app/public" ]; then cp -r /app/public ./public; fi
+
 EXPOSE 3000
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
 CMD ["node", "server.js"]
+
 ```
 
 Build and push the Docker image to a container registry, then deploy to Bunny Magic Containers through the Bunny dashboard.
